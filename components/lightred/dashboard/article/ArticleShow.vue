@@ -1,0 +1,389 @@
+<template>
+  <div>
+    <div class="list-article">
+      <div class="container">
+        <div class="row align-items-end pb-3">
+          <div class="col-lg-12">
+            <b-breadcrumb class="pb-1" :items="breadcrumb"></b-breadcrumb>
+            <div class="box-title fs-18 text-muted pb-4">
+              <span>
+                <img src="/assets/themes/lightred/images/subtitle_red.png" alt />Artikel Saya
+              </span>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="row">
+                  <div class="col-md-3">
+                    <nuxt-link
+                      to="/dashboard/article/add"
+                      class="btn btn-dashboard btn-danger-lightred fs-12 ml-0 btn-add-new"
+                    >
+                      <i class="fa fa-pencil mr-2"></i>TAMBAH ARTIKEL
+                    </nuxt-link>
+                  </div>
+                  <div class="col-md-9">
+                    <div v-if="$mq === 'mobile' || $mq === 'tablet'">
+                      <b-form-input
+                        class="m-b-10"
+                        placeholder="Cari Artikel"
+                        v-model="filter.search"
+                      ></b-form-input>
+                      <button class="btn btn-sm-dashboard btn-danger-lightred" @click="actFilter">
+                        <img src="/assets/themes/lightred/images/search.svg" class="mr-2" />Cari
+                      </button>
+                    </div>
+                    <div
+                      class="search-wrap list-dash-filter"
+                      v-if="$mq !== 'mobile' && $mq !== 'tablet'"
+                    >
+                      <div class="input-group ctm-input-group">
+                        <b-form-input
+                          class="col-md-10"
+                          placeholder="Cari Artikel"
+                          v-model="filter.search"
+                        ></b-form-input>
+
+                        <VueCtkDateTimePicker
+                          v-model="filter.startDate"
+                          :auto-close="true"
+                          :only-date="true"
+                          :no-label="true"
+                          locale="id"
+                          formatted="ll"
+                          format="YYYY-MM-DD"
+                          label="Pilih Tanggal Awal"
+                          class="form-control dash-filter-date"
+                        />
+
+                        <VueCtkDateTimePicker
+                          v-model="filter.endDate"
+                          :auto-close="true"
+                          :only-date="true"
+                          :no-label="true"
+                          locale="id"
+                          formatted="ll"
+                          format="YYYY-MM-DD"
+                          label="Pilih Tanggal Akhir"
+                          class="form-control dash-filter-date"
+                        />
+
+                        <select
+                          v-model="filter.status"
+                          class="form-control ldf-status"
+                          style="min-height: 38px;"
+                        >
+                          <option value>--Status--</option>
+                          <option value="0">Unpublish</option>
+                          <option value="1">Publish</option>
+                        </select>
+                        <button
+                          class="btn btn-sm-dashboard btn-danger-lightred br-l-none"
+                          @click="actFilter"
+                        >
+                          <img src="/assets/themes/lightred/images/search.svg" class="mr-2" />Cari
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <esd-loading-data ref="loadingData" />
+        <div v-if="loadedData">
+          <div class="row py-3" v-if="posts.length > 0">
+            <div class="col-md-6 py-3 px-2 px-lg-3" v-for="(post, index) in posts" :key="index">
+              <div class="box-shadow-news">
+                <b-media>
+                  <template v-slot:aside>
+                    <img v-bind:src="post.image[0]['original']" class="img-d-news" />
+                  </template>
+                  <div class="mb-1">
+                    <div
+                      class="label-dashboard"
+                      :class="post.is_publish==0?'bg-gray':'green'"
+                    >{{post.is_publish==0?'UNPUBLISH':'PUBLISH'}}</div>
+                    <div class="btn-aksi text-right">
+                      <nuxt-link
+                        :to="{ path: `article/edit?id=${post.id}&slug=${post.slug}`}"
+                        class="text-muted"
+                        v-b-tooltip.hover
+                        title="Ubah"
+                      >
+                        <i class="fa fa-edit"></i>
+                      </nuxt-link>
+                      <a
+                        :class="post.is_publish==0?'text-green-portal':'text-muted'"
+                        v-on:click="statusData(post.id,post.is_publish)"
+                        v-b-tooltip.hover
+                        :title="post.is_publish==0?'Publish':'Draft'"
+                      >
+                        <i class="fa fa-power-off"></i>
+                      </a>
+                      <a
+                        href="javascript:;"
+                        v-on:click="deleteData(post.id)"
+                        class="text-muted"
+                        v-b-tooltip.hover
+                        title="Hapus"
+                      >
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="title-artikel text-muted font-weight-bold">{{post.title}}</div>
+                  <div
+                    class="title-artikel text-muted content-artikel"
+                  >{{ $moment(post.input_datetime).format('LL') }}</div>
+                </b-media>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center p-t-110" v-else>
+            <div class="box-default m-auto text-center">
+              <img
+                src="/assets/themes/lightred/images/document.png"
+                width="64"
+                style="filter: grayscale(100%);"
+              />
+              <h3 class="op-0-4 mt-2">"Tidak Ada Artikel"</h3>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="ctm-pagination">
+              <ul aria-label="Pagination" class="pagination fs-12 pt-4 d-inline-flex">
+                <li v-if="pagination.first_page" class="page-item">
+                  <a href="javascript:;" @click="goToPage(1)" class="page-link">«</a>
+                </li>
+                <li v-if="pagination.prev != 0" class="page-item">
+                  <a
+                    href="javascript:;"
+                    @click="goToPage(pagination.prev)"
+                    class="page-link"
+                  >Sebelumnya</a>
+                </li>
+                <li
+                  v-for="page in pagination.detail"
+                  :key="page"
+                  v-bind:class="{'active' : page == pagination.current }"
+                  class="page-item"
+                >
+                  <a
+                    v-if="page == pagination.current"
+                    href="javascript:;"
+                    class="page-link"
+                  >{{page}}</a>
+                  <a v-else href="javascript:;" @click="goToPage(page)" class="page-link">{{page}}</a>
+                </li>
+                <li v-if="pagination.next != 0" class="page-item">
+                  <a
+                    href="javascript:;"
+                    @click="goToPage(pagination.next)"
+                    class="page-link"
+                  >Selanjutnya</a>
+                </li>
+                <li v-if="pagination.last_page" class="page-item">
+                  <a
+                    href="javascript:;"
+                    @click="goToPage(pagination.total_page)"
+                    class="page-link"
+                  >»</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import config from '~/config/config'
+import lib from '~/system/lib/Lib'
+
+export default {
+  name: 'NewsShow',
+  data() {
+    return {
+      loadedData: false,
+      filter: {
+        startDate: '',
+        endDate: '',
+        status: '',
+        search: ''
+      },
+      selected: null,
+      status: [
+        { value: null, text: 'Status Artikel' },
+        { value: 'a', text: 'This is First option' },
+        { value: 'b', text: 'Selected Option' }
+      ],
+      breadcrumb: [
+        {
+          text: 'Dashboard',
+          href: '/dashboard'
+        },
+        {
+          text: 'Artikel',
+          href: '/dashboard/article'
+        }
+      ],
+      rows: 50,
+      perPage: 10,
+      currentPage: 1,
+      posts: [],
+      pagination: {}
+    }
+  },
+  components: {},
+  mounted() {
+    this.fetchData()
+  },
+  methods: {
+    actFilter() {
+      let myfilter = {}
+      myfilter.start_date = this.filter.startDate
+      myfilter.end_date = this.filter.endDate
+      myfilter.status = this.filter.status
+      myfilter.s = this.filter.search
+      let newQueryPagged = Object.assign({}, this.$route.query, myfilter)
+      delete newQueryPagged.paged
+      this.$router.push({ query: newQueryPagged })
+      this.fetchData()
+    },
+
+    goToPage(page) {
+      this.currentPage = page
+      let newQueryPagged = Object.assign({}, this.$route.query, { paged: page })
+      this.$router.push({ query: newQueryPagged })
+      this.fetchData()
+    },
+    deleteData(id_data) {
+      if (confirm('Anda Yakin ingin menghapus Data ini ?')) {
+        let params = {
+          id: id_data
+        }
+        lib.ajax
+          .fetch('POST', `${config.baseUrlApi}/member/content/delete`, params)
+          .then(response => {
+            if (response.ok == 1) {
+              this.fetchData()
+              alert(response.message)
+            }
+          })
+          .catch(e => {})
+      }
+      // this.$dialog
+      // .confirm('Anda Yakin ingin menghapus Data ini ?')
+      // .then(function(dialog) {
+      //   console.log('Hapus');
+      //   let params={
+      //     id:id_data
+      //   }
+      //   lib.ajax
+      //   .fetch('POST', `${config.baseUrlApi}/member/content/delete`, params)
+      //   .then(response => {
+      //       if (response.ok == 1) {
+      //         this.fetchData();
+      //       }
+      //     })
+      // })
+      // .catch(function() {
+      //   console.log('Batal');
+      // });
+    },
+    statusData(id_data, status) {
+      if (status == 0) {
+        let params = {
+          id: id_data
+        }
+        lib.ajax
+          .fetch('POST', `${config.baseUrlApi}/member/content/publish`, params)
+          .then(response => {
+            if (response.ok == 1) {
+              this.fetchData()
+              // alert(response.message)
+            }
+          })
+          .catch(e => {})
+      } else {
+        let params = {
+          id: id_data
+        }
+        lib.ajax
+          .fetch(
+            'POST',
+            `${config.baseUrlApi}/member/content/unpublish`,
+            params
+          )
+          .then(response => {
+            if (response.ok == 1) {
+              this.fetchData()
+              // alert(response.message)
+            }
+          })
+          .catch(e => {})
+      }
+    },
+    fetchData() {
+      this.loading = true
+      let param = {
+        limit: this.perPage,
+        page: this.currentPage,
+        type_id: 10,
+        sort: 'input_datetime',
+        dir: 'desc'
+      }
+      param.filter = []
+      param.filter.push({
+        type: 'string',
+        field: 'account_id',
+        value: this.$store.state.auth.authUser.id,
+        comparison: '='
+      })
+
+      if (this.filter.search != '') {
+        param.filter.push({
+          type: 'string',
+          field: 'title',
+          value: this.filter.search,
+          comparison: '<'
+        })
+      }
+      if (this.filter.startDate != '' && this.filter.endDate != '') {
+        param.filter.push({
+          type: 'date',
+          field: 'input_datetime',
+          value: this.filter.startDate + '::' + this.filter.endDate,
+          comparison: 'bet'
+        })
+      }
+      if (this.filter.status != '') {
+        param.filter.push({
+          type: 'string',
+          field: 'is_publish',
+          value: this.filter.status,
+          comparison: '='
+        })
+      }
+      lib.ajax
+        .fetch('GET', `${config.baseUrlApi}/member/content/list/by-type`, param)
+        .then(response => {
+          this.$refs.loadingData.finish()
+          this.posts = response.result.data
+          this.pagination = response.result.pagination
+          this.rows = this.pagination.total_data
+          this.loading = false
+          this.loadedData = true
+        })
+        .catch(e => {})
+    }
+  },
+
+  props: {},
+  computed: {}
+}
+</script>
+<style>
+</style>

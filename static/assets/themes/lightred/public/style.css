@@ -1,0 +1,31 @@
+/*
+    Engine Portal
+    Build Date: Oktober 2019
+	Author :Front End ESD
+*/
+
+/* IMPORT FONT */
+	 @import url('https://fonts.googleapis.com/css?family=Poppins');
+
+/* GENERAL */
+:root {
+    --main-font-family:'Poppins';
+	--main-background:#;
+	--main-color:#;
+}
+body {
+	font-family:var(--main-font-family);
+	background:;
+}
+
+/* HEADER */
+
+
+/* CONTENT */
+
+
+/* FOOTER */
+
+
+
+/* RESPONSIVE */

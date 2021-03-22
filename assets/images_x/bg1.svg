@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1396" height="262.078" viewBox="0 0 1396 262.078">
+  <defs>
+    <filter id="Intersection_5" x="0" y="112" width="1396" height="96.709" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feFlood flood-color="#7f7f7f" flood-opacity="0.102"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Intersection_4" x="0.001" y="12.688" width="1395.999" height="196.021" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur-2"/>
+      <feFlood flood-color="#7f7f7f" flood-opacity="0.102"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Intersection_3" x="0" y="26.989" width="1395.578" height="181.719" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur-3"/>
+      <feFlood flood-color="#7f7f7f" flood-opacity="0.102"/>
+      <feComposite operator="in" in2="blur-3"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="bg1" transform="translate(14149.001 -504.922)">
+    <g id="bg" transform="translate(-14134.002 504.922)">
+      <g transform="matrix(1, 0, 0, 1, -15, 0)" filter="url(#Intersection_5)">
+        <path id="Intersection_5-2" data-name="Intersection 5" d="M1023.367,66.709c10.769-2.391,20.906-5.057,30.331-8,104.472-32.636,212.742-43.822,312.3-43.749V56.709a10,10,0,0,1-10,10ZM10,66.709a10,10,0,0,1-10-10V0C158.867,25.532,336.818,50.677,503.877,66.709Z" transform="translate(15 127)" fill="#ed3237"/>
+      </g>
+      <g transform="matrix(1, 0, 0, 1, -15, 0)" filter="url(#Intersection_4)">
+        <path id="Intersection_4-2" data-name="Intersection 4" d="M10,166.02a10,10,0,0,1-10-10V57.7c243.3,40.312,540.906,60.572,788.006-9.841C997.076-11.719,1199.271-7.98,1366,17.6V156.02a10,10,0,0,1-10,10Z" transform="translate(15 27.69)" fill="#ed3237" opacity="0.6"/>
+      </g>
+      <g transform="matrix(1, 0, 0, 1, -15, 0)" filter="url(#Intersection_3)">
+        <path id="Intersection_3-2" data-name="Intersection 3" d="M10,151.719a10,10,0,0,1-10-10V63.211c99.684,3.984,195.83.246,277.734-16.09C638.947-24.925,702.156-23.118,1254.8,114.36q56.617,14.084,110.778,25.137v2.222a10,10,0,0,1-10,10Z" transform="translate(15 41.99)" fill="#ed3237" opacity="0.6"/>
+      </g>
+      <path id="Intersection_2" data-name="Intersection 2" d="M10,193.709a10,10,0,0,1-10-10V0Q63.2,14.089,125.532,28.584c340.4,78.723,652.7,157.446,825.242,123.029C1156.669,110.543,1234.6,42.283,1366,16.642V183.709a10,10,0,0,1-10,10Z" transform="translate(0.002 0)" fill="#ed3237" opacity="0.6"/>
+    </g>
+    <rect id="Rectangle_2286" data-name="Rectangle 2286" width="1366" height="88" transform="translate(-14134 679)" fill="#ed3237"/>
+  </g>
+</svg>

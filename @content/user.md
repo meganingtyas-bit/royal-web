@@ -1,0 +1,36 @@
+```
+"data": {
+    "id": 0,
+    "referral_id": 0,
+    "client_id": 0,
+    "client_code": "0",
+    "client_name": "",
+    "client_regional_id": null,
+    "client_regional_name": "",
+    "name": "",
+    "email": "",
+    "mobilephone": "",
+    "image": "",
+    "join_datetime": "2019-10-23 11:35:07",
+    "last_login_datetime": "2019-11-14 16:47:21",
+    "is_active": 0,
+    "gender": 0, # 1 = laki-laki 2 = perempuan
+    "birthdate": "",
+    "address": "",
+    "province_id": 0,
+    "province_name": "",
+    "city_id": 0,
+    "city_name": "",
+    "subdistrict_id": 0,
+    "subdistrict_name": "",
+    "village_id": "0",
+    "village_name": "",
+    "zipcode": "0",
+    "hobby": "[]",
+    "instagram": "",
+    "facebook": "",
+    "twitter": "",
+    "linkedin": "",
+    "verification": {}
+}
+```
